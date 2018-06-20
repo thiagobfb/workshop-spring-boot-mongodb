@@ -1,13 +1,17 @@
 package com.thiagobernardo.workshopmongo.resources;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.thiagobernardo.workshopmongo.domain.Post;
+import com.thiagobernardo.workshopmongo.resources.util.URL;
 import com.thiagobernardo.workshopmongo.service.PostService;
 
 @RestController
@@ -23,31 +27,11 @@ public class PostResource {
 		return ResponseEntity.ok().body(post);
 	}
 	
-//	@RequestMapping(method = RequestMethod.POST)
-//	public ResponseEntity<Void> insert(@RequestBody UserDTO dto) {
-//		User user = service.fromDTO(dto);
-//		user = service.insert(user);
-//		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
-//		return ResponseEntity.created(uri).build();
-//	}
-//	
-//	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
-//	public ResponseEntity<Void> update(@RequestBody UserDTO objDto, @PathVariable("id") String id) {
-//		User obj = service.fromDTO(objDto);
-//		obj.setId(id);
-//		obj = service.update(obj);
-//		return ResponseEntity.noContent().build();
-//	}
-//	
-//	@RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-//	public ResponseEntity<Void> delete(@PathVariable("id") String id) {
-//		service.delete(id);
-//		return ResponseEntity.noContent().build();
-//	}
-//	
-//	@RequestMapping(value = "/{id}/posts", method = RequestMethod.GET)
-//	public ResponseEntity<List<Post>> findPosts(@PathVariable("id") String id) {
-//		User user = service.findById(id);
-//		return ResponseEntity.ok().body(user.getPosts());
-//	}
+	@RequestMapping(value = "/titlesearch", method = RequestMethod.GET)
+	public ResponseEntity<List<Post>> findByTitle(@RequestParam(value = "text", defaultValue = "") String text) {
+		String decodedText = URL.decodeParam(text);
+		List<Post> posts = service.findByTitle(decodedText);
+		return ResponseEntity.ok().body(posts);
+	}
+	
 }
